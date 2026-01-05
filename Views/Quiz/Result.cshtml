@@ -1,0 +1,165 @@
+@{
+    Layout = "_Layout";
+}
+
+<h1 class="page-title">
+    <i class="fas fa-trophy me-2"></i>Résultat du Quiz
+</h1>
+
+@if(ViewBag.Passed)
+{
+    <!-- Certification de Félicitation -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10">
+            <div class="certificate-container" id="certificate" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border: 8px solid #6366f1; border-radius: 20px; padding: 3rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; overflow: hidden;">
+                <!-- Motif décoratif -->
+                <div style="position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: rgba(99, 102, 241, 0.1); border-radius: 50%;"></div>
+                <div style="position: absolute; bottom: -50px; right: -50px; width: 200px; height: 200px; background: rgba(139, 92, 246, 0.1); border-radius: 50%;"></div>
+                
+                <div class="text-center position-relative" style="z-index: 1;">
+                    <!-- En-tête du certificat -->
+                    <div class="mb-4">
+                        <i class="fas fa-certificate fa-4x text-primary mb-3"></i>
+                        <h2 class="text-uppercase fw-bold" style="color: #6366f1; letter-spacing: 3px; font-size: 2rem;">
+                            Certificat de Réussite
+                        </h2>
+                        <div style="width: 100px; height: 3px; background: linear-gradient(90deg, #6366f1, #8b5cf6); margin: 1rem auto;"></div>
+                    </div>
+                    
+                    <!-- Corps du certificat -->
+                    <div class="my-5" style="padding: 2rem; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <p class="lead mb-4" style="color: #4b5563; font-size: 1.2rem;">
+                            Ce certificat atteste que
+                        </p>
+                        <h1 class="display-4 fw-bold mb-4" style="color: #1f2937; text-transform: uppercase; letter-spacing: 2px;">
+                            @ViewBag.Username
+                        </h1>
+                        <p class="lead mb-4" style="color: #4b5563; font-size: 1.2rem;">
+                            a réussi avec succès le quiz du cours
+                        </p>
+                        <h2 class="fw-bold mb-4" style="color: #6366f1; font-size: 2rem;">
+                            @ViewBag.Course
+                        </h2>
+                        <div class="d-flex justify-content-center align-items-center gap-3 mb-4">
+                            <div style="width: 60px; height: 2px; background: #6366f1;"></div>
+                            <i class="fas fa-star text-warning fa-2x"></i>
+                            <div style="width: 60px; height: 2px; background: #6366f1;"></div>
+                        </div>
+                        <p class="text-muted mb-0" style="font-size: 1.1rem;">
+                            Score obtenu : <span class="fw-bold text-success" style="font-size: 1.5rem;">@ViewBag.Score%</span>
+                        </p>
+                    </div>
+                    
+                    <!-- Date et signature -->
+                    <div class="row mt-4">
+                        <div class="col-md-6 text-start">
+                            <p class="text-muted mb-0"><strong>Date d'obtention :</strong></p>
+                            <p class="text-dark fw-semibold">@ViewBag.Date</p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <p class="text-muted mb-0"><strong>E-Learning Platform</strong></p>
+                            <div style="width: 150px; height: 2px; background: #6366f1; margin: 0.5rem 0 0 auto;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bouton d'impression -->
+            <div class="text-center mt-4">
+                <button onclick="window.print()" class="btn btn-primary btn-lg me-2">
+                    <i class="fas fa-print me-2"></i>Imprimer le Certificat
+                </button>
+                <button onclick="downloadCertificate()" class="btn btn-success btn-lg">
+                    <i class="fas fa-download me-2"></i>Télécharger le Certificat
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Résultat du Quiz -->
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-lg border-0 text-center" style="border-radius: 20px; overflow: hidden;">
+            <div class="card-body p-5">
+                @if(ViewBag.Passed)
+                {
+                    <div class="mb-4">
+                        <div class="bg-success bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                             style="width: 120px; height: 120px;">
+                            <i class="fas fa-check fa-4x text-white"></i>
+                        </div>
+                        <h2 class="text-success fw-bold mb-2">Félicitations !</h2>
+                        <p class="text-muted">Vous avez réussi le quiz et obtenu votre certification !</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="mb-4">
+                        <div class="bg-danger bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                             style="width: 120px; height: 120px;">
+                            <i class="fas fa-times fa-4x text-white"></i>
+                        </div>
+                        <h2 class="text-danger fw-bold mb-2">Quiz échoué</h2>
+                        <p class="text-muted">Continuez à vous entraîner ! Vous devez obtenir au moins 50% pour obtenir la certification.</p>
+                    </div>
+                }
+                
+                <div class="my-4">
+                    <h3 class="fw-bold mb-3">@ViewBag.Course</h3>
+                    <div class="display-1 fw-bold @(ViewBag.Passed ? "text-success" : "text-warning")">
+                        @ViewBag.Score%
+                    </div>
+                    <p class="text-muted mt-2">Votre score</p>
+                </div>
+                
+                <div class="progress mb-4" style="height: 20px; border-radius: 10px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated 
+                        @(ViewBag.Passed ? "bg-success" : ViewBag.Score >= 50 ? "bg-warning" : "bg-danger")" 
+                        role="progressbar" 
+                        style="width: @ViewBag.Score%" 
+                        aria-valuenow="@ViewBag.Score" 
+                        aria-valuemin="0" 
+                        aria-valuemax="100">
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                    <a href="/Courses" class="btn btn-primary btn-lg">
+                        <i class="fas fa-book me-2"></i>Retour aux Cours
+                    </a>
+                    <a href="/Dashboard" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-home me-2"></i>Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @@media print {
+        body * {
+            visibility: hidden;
+        }
+        #certificate, #certificate * {
+            visibility: visible;
+        }
+        #certificate {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            page-break-after: always;
+        }
+        .page-title, .btn, nav {
+            display: none !important;
+        }
+    }
+</style>
+
+<script>
+    function downloadCertificate() {
+        window.print();
+    }
+</script>

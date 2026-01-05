@@ -1,0 +1,68 @@
+@{
+    Layout = "_Layout";
+}
+@model IEnumerable<ElearningPlatform.Models.QuizQuestion>
+
+<h1 class="page-title">
+    <i class="fas fa-question-circle me-2"></i>Quiz
+</h1>
+
+<div class="card shadow-sm border-0" style="border-radius: 15px;">
+    <div class="card-body p-4">
+        <form method="post" action="/Quiz/Submit">
+            <input type="hidden" name="courseId" value="@ViewBag.CourseId"/>
+            
+            @{ int questionNum = 1; }
+            @foreach(var q in Model)
+            {
+                <div class="mb-4 p-4 border rounded-3" style="background: #f9fafb;">
+                    <div class="d-flex align-items-start mb-3">
+                        <span class="badge bg-primary rounded-circle me-3" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+                            @questionNum
+                        </span>
+                        <h5 class="mb-0 fw-bold text-dark flex-grow-1">@q.Question</h5>
+                    </div>
+                    
+                    <div class="ms-5">
+                        <div class="form-check mb-2 p-3 border rounded" style="background: white; cursor: pointer; transition: all 0.2s;">
+                            <input class="form-check-input" type="radio" name="answers[@q.QuizQuestionId]" id="q@(q.QuizQuestionId)_A" value="A" required>
+                            <label class="form-check-label w-100" for="q@(q.QuizQuestionId)_A" style="cursor: pointer;">
+                                <strong>A.</strong> @q.A
+                            </label>
+                        </div>
+                        <div class="form-check mb-2 p-3 border rounded" style="background: white; cursor: pointer; transition: all 0.2s;">
+                            <input class="form-check-input" type="radio" name="answers[@q.QuizQuestionId]" id="q@(q.QuizQuestionId)_B" value="B" required>
+                            <label class="form-check-label w-100" for="q@(q.QuizQuestionId)_B" style="cursor: pointer;">
+                                <strong>B.</strong> @q.B
+                            </label>
+                        </div>
+                        <div class="form-check mb-2 p-3 border rounded" style="background: white; cursor: pointer; transition: all 0.2s;">
+                            <input class="form-check-input" type="radio" name="answers[@q.QuizQuestionId]" id="q@(q.QuizQuestionId)_C" value="C" required>
+                            <label class="form-check-label w-100" for="q@(q.QuizQuestionId)_C" style="cursor: pointer;">
+                                <strong>C.</strong> @q.C
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                questionNum++;
+            }
+            
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-lg px-5">
+                    <i class="fas fa-paper-plane me-2"></i>Valider le Quiz
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .form-check:hover {
+        background: #f0f0f0 !important;
+        border-color: #6366f1 !important;
+    }
+    .form-check-input:checked + .form-check-label {
+        color: #6366f1;
+        font-weight: 600;
+    }
+</style>
